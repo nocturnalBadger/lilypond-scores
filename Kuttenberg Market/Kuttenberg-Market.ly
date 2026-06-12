@@ -26,36 +26,30 @@ horn = {
 }
 
 melodyA = {
-  \repeat volta  2 {
-    a16 b c' d'
-    e'8. d'16 e'8. d'16  e'16 fis' g' r16 fis'4 e'8 c'16 e' g'8 fis'8 e'4 e'
-    e'8. d'16 e'8. d'16 e'16 fis' g' a'16 fis'4 e'8 a16 b c' d' b8 a4
-  }
+  a16 b c' d' |
+  e'8. d'16 e'8. d'16  e'16 fis' g'8  fis'4 | e'8 c'16 e' g'8 fis'8 e'4 e' |
+  e'8. d'16 e'8. d'16 e'16 fis' g' a'16 fis'4 | e'8 a16 b c' d' b8 a2 |
 }
 
 melodyB = {
-  \repeat volta 2 {
-    a16 b c' b a8 b4 c'16 b c' d' b4
-    c'8 a16 b c' b c' d' e'4.
-    a16 b c' b a8 b4 c'16 b c' d' b4
-    \alternative {
-      \volta 1 { c'8 b32 c' d' e'8 fis'16 g' a'4.}
-      \volta 2 { c'8 a16 b e'8 fis'16 g' a'2 }
-    }
-  }
+  a16 b | 
+  c' b a8 b4 c'16 b c' d' b4 |
+  c'8 a16 b c' b c' d' e'4. a16 b | 
+  c' b a8 b4 c'16 b c' d' b4 |
+  c'8 a 32 b c' d' e'8 fis'16 g' a'2 |
+}
+
+
+melodyCPickup = {
+  % plays 3 32nd notes in the time it would normally take to play 2, so a 16th
+  \tuplet 3/2  { e'32 fis' g'} |
 }
 
 melodyC = {
-  \repeat volta 2 {
-    e'32 fis' g' a'8 e'8 g'16 fis' e'8 a8 e' g'16 fis' e'8
-    a'8 e'16 fis' g' fis' e'8 c'8 c'16 d' e'4
-    a'8 e'8 g'16 fis' e'8 a16 d' e' a' g' fis' e'8
+    a'8 e'8 g'16 fis' e'8 a8 e' g'16 fis' e'8 |
+    a'8 e'16 fis' g' fis' e'8 c'8 c'16 d' e'4 |
+    a'8 e'8 g'16 fis' e'8 a16 d' e' a' g' fis' e'8 |
     a'8 e'16 fis' g' fis' e'8 fis'16 g' fis'8
-    \alternative {
-      \volta 1 {  e'8.}
-      \volta 2 { a'4. }
-    }
-  }
 }
 
 music = {
@@ -67,16 +61,35 @@ music = {
 
     \new Staff = "Recorder" {
       \set Staff.instrumentName = "Alto Recorder"
+      \set Staff.shortInstrumentName = "rec."
       \new Voice = "Recorder"  {
         \global
         \transpose c c' {
-        r1 r2.
-        \melodyA
-        \repeat segno 2 {
+          r1 r2.
+          \melodyA
+          R1*3 r2 r4.
           \melodyB
-          % TODO: figure out how to overlay segments. The B part comes in a quarter(?) before the A part is actually done and likewise from B to C
-          \melodyC
+          R1*3 r16*15
+          \melodyCPickup
+          \melodyC a'4
         }
+      }
+    }
+    \new Staff = "Crumhorn" {
+      \set Staff.instrumentName = "Crumhorn"
+      \set Staff.shortInstrumentName = "crum."
+      \new Voice = "Crumhorn" {
+        \global
+        R1*5 r2 r4
+        \melodyA
+        R1*3 r16*15 % rest for all but the last 16th for a pickup
+        \melodyCPickup
+        \repeat volta 2 {
+          \melodyC
+          \alternative {
+            \volta 1 { e'4 }
+            \volta 2 { a'4 }
+          }
         }
       }
     }
